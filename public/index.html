@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Secure Dashboard</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <main class="shell">
+      <section class="auth" id="authView">
+        <div class="brand">
+          <div class="mark">SD</div>
+          <div>
+            <h1>Secure Dashboard</h1>
+            <p>Verified accounts, protected sessions, and role-aware user management.</p>
+          </div>
+        </div>
+
+        <div class="panel auth-panel">
+          <div class="tabs" role="tablist">
+            <button class="tab active" data-tab="login">Login</button>
+            <button class="tab" data-tab="register">Register</button>
+            <button class="tab" data-tab="reset">Reset</button>
+          </div>
+
+          <form id="loginForm" class="form auth-form">
+            <label>Email <input name="email" type="email" autocomplete="email" required></label>
+            <label>Password <input name="password" type="password" autocomplete="current-password" required></label>
+            <button type="submit">Login</button>
+          </form>
+
+          <form id="twoFactorForm" class="form auth-form hidden">
+            <label>2FA Code <input name="code" inputmode="numeric" autocomplete="one-time-code" required></label>
+            <button type="submit">Verify Code</button>
+          </form>
+
+          <form id="registerForm" class="form auth-form hidden">
+            <label>Name <input name="name" autocomplete="name" required></label>
+            <label>Email <input name="email" type="email" autocomplete="email" required></label>
+            <label>Password <input name="password" type="password" autocomplete="new-password" required></label>
+            <button type="submit">Create Account</button>
+          </form>
+
+          <form id="forgotForm" class="form auth-form hidden">
+            <label>Email <input name="email" type="email" autocomplete="email" required></label>
+            <button type="submit">Send Reset Link</button>
+          </form>
+
+          <form id="resetForm" class="form auth-form hidden">
+            <label>Reset Token <input name="token" required></label>
+            <label>New Password <input name="password" type="password" autocomplete="new-password" required></label>
+            <button type="submit">Reset Password</button>
+          </form>
+
+          <p class="notice" id="authMessage"></p>
+          <a class="outbox" href="/dev/outbox" target="_blank" rel="noreferrer">Open development email outbox</a>
+        </div>
+      </section>
+
+      <section class="dashboard hidden" id="dashboardView">
+        <aside class="sidebar">
+          <div class="brand compact">
+            <div class="mark">SD</div>
+            <div>
+              <strong>Secure Dashboard</strong>
+              <span id="roleBadge"></span>
+            </div>
+          </div>
+          <nav>
+            <button class="nav active" data-view="overview">Overview</button>
+            <button class="nav" data-view="profile">Profile</button>
+            <button class="nav" data-view="security">Security</button>
+            <button class="nav hidden" id="adminNav" data-view="admin">Admin</button>
+          </nav>
+          <button id="logoutButton" class="ghost">Logout</button>
+        </aside>
+
+        <section class="content">
+          <header class="topbar">
+            <div>
+              <h2 id="welcomeTitle">Dashboard</h2>
+              <p id="welcomeSubtitle"></p>
+            </div>
+            <div class="status-pill" id="verifiedStatus"></div>
+          </header>
+
+          <section class="page" id="overviewPage">
+            <div class="metrics">
+              <article class="metric"><span>Role</span><strong id="metricRole"></strong></article>
+              <article class="metric"><span>Email</span><strong id="metricEmail"></strong></article>
+              <article class="metric"><span>2FA</span><strong id="metric2fa"></strong></article>
+            </div>
+            <div class="panel">
+              <h3>Recent Activity</h3>
+              <ul class="activity" id="activityList"></ul>
+            </div>
+          </section>
+
+          <section class="page hidden" id="profilePage">
+            <div class="panel">
+              <h3>Profile</h3>
+              <form id="profileForm" class="form grid-form">
+                <label>Name <input name="name" required></label>
+                <label>Email <input name="email" type="email" required></label>
+                <button type="submit">Save Profile</button>
+              </form>
+            </div>
+          </section>
+
+          <section class="page hidden" id="securityPage">
+            <div class="panel">
+              <h3>Change Password</h3>
+              <form id="passwordForm" class="form grid-form">
+                <label>Current Password <input name="currentPassword" type="password" autocomplete="current-password" required></label>
+                <label>New Password <input name="newPassword" type="password" autocomplete="new-password" required></label>
+                <button type="submit">Update Password</button>
+              </form>
+            </div>
+            <div class="panel">
+              <h3>Two-Factor Authentication</h3>
+              <label class="toggle"><input id="twoFactorToggle" type="checkbox"> Require email code on login</label>
+            </div>
+          </section>
+
+          <section class="page hidden" id="adminPage">
+            <div class="panel">
+              <h3>User Management</h3>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>Name</th><th>Email</th><th>Role</th><th>Verified</th><th>Actions</th></tr>
+                  </thead>
+                  <tbody id="usersTable"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <p class="notice" id="dashboardMessage"></p>
+        </section>
+      </section>
+    </main>
+    <script src="/app.js"></script>
+  </body>
+</html>
